@@ -1,0 +1,108 @@
+[gd_scene load_steps=9 format=3 uid="uid://bbd8lsfondvgs"]
+
+[ext_resource type="Script" uid="uid://bpqt6yfajvvik" path="res://addons/GDContextMenu/Demo/DemoSceneScript.gd" id="1_aaftx"]
+[ext_resource type="Script" uid="uid://bjnjgj1o2g774" path="res://addons/GDContextMenu/Demo/DemoSceneScript.cs" id="2_xmw4l"]
+[ext_resource type="Script" uid="uid://qhg58byq8uba" path="res://addons/GDContextMenu/Code/ContextMenuControl.cs" id="3_f307w"]
+[ext_resource type="Script" uid="uid://tsgoc20b2p45" path="res://addons/GDContextMenu/Code/ContextMenuEntry.cs" id="4_d71r2"]
+
+[sub_resource type="GDScript" id="GDScript_d71r2"]
+resource_name = "TestScript"
+script/source = "extends Panel
+
+@onready var context_menu : ContextMenuControl = $\"Context Menu\"
+
+func _runTest() -> void:
+	print(\"(Control) Context Menu is working...\")
+
+func _enableThirdButton() -> void:
+	#Could also use:
+	#contextMenu.SetButtonDisabled(2, false)
+	#context_menu.contextMenu.SetButtonDisabledByLabel(\"Disabled\", false)
+	context_menu.contextMenu.SetButtonDisabledByLabel(\"Disabled\", false)
+	
+"
+
+[sub_resource type="Resource" id="Resource_b6a1l"]
+script = ExtResource("4_d71r2")
+Label = "Run the Test"
+ActionTarget = NodePath("..")
+ActionMethod = "_runTest"
+disabled = false
+metadata/_custom_type_script = "uid://tsgoc20b2p45"
+
+[sub_resource type="Resource" id="Resource_d71r2"]
+script = ExtResource("4_d71r2")
+Label = "Enable third Button"
+ActionTarget = NodePath("..")
+ActionMethod = "_enableThirdButton"
+disabled = false
+metadata/_custom_type_script = "uid://tsgoc20b2p45"
+
+[sub_resource type="Resource" id="Resource_c3ecu"]
+script = ExtResource("4_d71r2")
+Label = "Disabled"
+ActionTarget = NodePath("..")
+ActionMethod = ""
+disabled = true
+metadata/_custom_type_script = "uid://tsgoc20b2p45"
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GD" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 57.0
+offset_top = 44.0
+offset_right = 307.0
+offset_bottom = 544.0
+script = ExtResource("1_aaftx")
+
+[node name="Label" type="Label" parent="GD"]
+layout_mode = 0
+offset_right = 247.0
+offset_bottom = 23.0
+text = "GD Script Example"
+
+[node name="C#" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 480.0
+offset_top = 44.0
+offset_right = 730.0
+offset_bottom = 544.0
+script = ExtResource("2_xmw4l")
+
+[node name="Label" type="Label" parent="C#"]
+layout_mode = 0
+offset_right = 250.0
+offset_bottom = 23.0
+text = "C# Script Example"
+
+[node name="Control" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 888.0
+offset_top = 44.0
+offset_right = 1138.0
+offset_bottom = 544.0
+script = SubResource("GDScript_d71r2")
+
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 0
+offset_right = 250.0
+offset_bottom = 23.0
+text = "Control Example"
+
+[node name="Context Menu" type="Control" parent="Control" node_paths=PackedStringArray("_nodeToConnect")]
+anchors_preset = 0
+offset_left = -888.0
+offset_top = -44.0
+offset_right = -848.0
+offset_bottom = -4.0
+script = ExtResource("3_f307w")
+_nodeToConnect = NodePath("..")
+MenuEntries = Array[ExtResource("4_d71r2")]([SubResource("Resource_b6a1l"), SubResource("Resource_d71r2"), SubResource("Resource_c3ecu")])
+metadata/_custom_type_script = "uid://qhg58byq8uba"
