@@ -8,6 +8,11 @@
 
 ---
 
+## 📦 Changelog
+See what's new in [1.1](CHANGELOG.md)
+
+---
+
 ## Table of Contents
 
 - [Features](#features)  
