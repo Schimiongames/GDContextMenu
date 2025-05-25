@@ -15,8 +15,6 @@
   - [GDScript example](#gdscript-example)  
   - [C# example](#c-example)  
 - [API Reference](#api-reference)  
-  - [GDScript](#gdscript)  
-  - [C#](#c)  
 - [Installation](#installation)  
 - [Requirements](#requirements)  
 - [About the Developer](#about-the-developer)  
@@ -44,21 +42,28 @@
 var contextMenu : ContextMenu
 
 func _ready() -> void:
-    contextMenu = ContextMenu.new()
-    add_child(contextMenu)
-
-    contextMenu.AddButton("Run the Test", self, "_runTest", false)
-    contextMenu.AddButton("Enable third Button", self, "_enableThirdButton", false)
-    contextMenu.AddButton("Disabled", self, "", true)
-    contextMenu.ConnectToNode(panel)  # Node that triggers the context menu
-
+	contextMenu = ContextMenu.new()
+	contextMenu.attach_to(self)
+	contextMenu.set_minimum_size(Vector2i(400, 0))
+	contextMenu.add_item("Run the Test", Callable(self, "_runTest"), false, null)
+	contextMenu.add_checkbox_item("Enable third Button", Callable(self, "_enableThirdButton"), false, false, null)
+	contextMenu.add_placeholder_item("Disabled", true, null)
+	contextMenu.add_seperator()
+	var subMenu : ContextMenu = contextMenu.add_submenu("Submenu")
+	subMenu.add_item("Run the Submenu Test", Callable(self, "_runTest"), false, null)
+	
+	contextMenu.connect_to(panel)
+	
 func _runTest() -> void:
-    print("(GD) Context Menu is working...")
-
-func _enableThirdButton() -> void:
-    # Or alternatively:
-    # contextMenu.SetButtonDisabled(2, false)
-    contextMenu.SetButtonDisabledByLabel("Disabled", false)
+	print("(GD) Context Menu is working...")
+	
+func _enableThirdButton(isChecked : bool) -> void:
+	if(isChecked):
+		contextMenu.set_item_disabled("Disabled", false)
+		contextMenu.update_item_label("Disabled", "Enabled")
+	else:
+		contextMenu.set_item_disabled("Disabled", true)
+		contextMenu.update_item_label("Enabled", "Disabled")
 ```
 
 ---
@@ -66,18 +71,22 @@ func _enableThirdButton() -> void:
 ### C# example
 
 ```csharp
-private ContextMenu contextMenu;
-
+ContextMenu contextMenu;
 public override void _Ready()
 {
     base._Ready();
 
-    contextMenu = new ContextMenu(this);
-    contextMenu.AddButton("Run the Test", _runTest, false);
-    contextMenu.AddButton("Enable third Button", _enableThirdButton, false);
-    contextMenu.AddButton("Disabled", null, true);
+    contextMenu = new ContextMenu();
+    contextMenu.attach_to(this);
+    contextMenu.set_minimum_size(new Vector2I(400, 0));
+    contextMenu.add_item("Run the Test", new Callable(this, nameof(_runTest)), false);
+    contextMenu.add_checkbox_item("Enable third Button", new Callable(this, nameof(_enableThirdButton)), false);
+    contextMenu.add_placeholder_item("Disabled", true);
+    contextMenu.add_seperator();
+    ContextMenu subMenu = contextMenu.add_submenu("Submenu");
+    subMenu.add_item("Run the Submenu Test", new Callable(this, nameof(_runTest)), false);
 
-    contextMenu.ConnectToNode(this);  // Must be a Control node
+    contextMenu.connect_to(this);
 }
 
 private void _runTest()
@@ -85,9 +94,18 @@ private void _runTest()
     GD.Print("(C#) Context Menu is working...");
 }
 
-private void _enableThirdButton()
+private void _enableThirdButton(bool isChecked)
 {
-    contextMenu.SetButtonDisabledByLabel("Disabled", false);
+    if (isChecked)
+    {
+        contextMenu.set_item_disabled("Disabled", false);
+        contextMenu.update_item_label("Disabled", "Enabled");
+    }
+    else
+    {
+        contextMenu.set_item_disabled("Disabled", true);
+        contextMenu.update_item_label("Enabled", "Disabled");
+    }
 }
 ```
 
@@ -95,23 +113,24 @@ private void _enableThirdButton()
 
 ## API Reference
 
-### GDScript
+## 📘 API Reference – GDContextMenu v1.1
 
-| Method                                     | Description                                         |
-|--------------------------------------------|-----------------------------------------------------|
-| `AddButton(Label, Callback, Method as String, Disabled?)` | Adds a button with label, callback method, disabled state |
-| `ConnectToNode(Node)`                       | Connects menu to a Control node that triggers right-click |
-| `SetButtonDisabled(id, value)`              | Enables/disables a button by its index                |
-| `SetButtonDisabledByLabel(label, value)`   | Enables/disables a button by its label                 |
+All functions below are available in both **GDScript** and **C#**.
 
-### C#
+| Method | Description |
+|--------|-------------|
+| `add_item(label, callback, disabled = false, icon = null)` | Adds a clickable menu item with optional disabled state and icon. |
+| `add_checkbox_item(label, callback, disabled = false, is_checked = false, icon = null)` | Adds a checkbox item. The callback will receive a `bool` representing its state. |
+| `add_separator()` | Adds a horizontal separator line between menu items. |
+| `add_placeholder_item(label)` | Adds a non-interactive label (useful for grouping or headers). |
+| `update_item_label(id_or_label, new_label)` | Changes the label of an existing menu item. |
+| `set_item_disabled(id_or_label, disabled)` | Enables or disables a menu item by index or label. |
+| `set_item_checked(id_or_label, checked)` | Sets the checked state of a checkbox item. |
+| `set_minimum_size(Vector2i)` | Defines the minimum size of the context menu. |
+| `attach_to(target_node)` | Attaches the context menu to a node (typically the scene root or a container). |
+| `connect_to(control_node)` | Enables right-click activation on the given Control node. |
 
-| Method                                     | Description                                         |
-|--------------------------------------------|-----------------------------------------------------|
-| `AddButton(Label, Callback, Disabled?)`    | Adds a button with label and callback delegate        |
-| `ConnectToNode(Node)`                       | Connects to a Control node for right-click activation  |
-| `SetButtonDisabled(id, value)`              | Enables/disables a button by index                      |
-| `SetButtonDisabledByLabel(label, value)`   | Enables/disables a button by label                      |
+> 🧠 **Note**: `id_or_label` can be either an `int` (item ID) or a `String` (label).
 
 ---
 
@@ -126,8 +145,8 @@ private void _enableThirdButton()
 
 ## Requirements
 
-- Godot Engine **4.4.1**  
-- C# support enabled (if using C#)  
+- Godot Engine **4.4.1** MONO
+- C# support enabled
 
 ---
 
