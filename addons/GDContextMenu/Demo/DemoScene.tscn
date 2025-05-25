@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bbd8lsfondvgs"]
+[gd_scene load_steps=12 format=3 uid="uid://bbd8lsfondvgs"]
 
 [ext_resource type="Script" uid="uid://bpqt6yfajvvik" path="res://addons/GDContextMenu/Demo/DemoSceneScript.gd" id="1_aaftx"]
 [ext_resource type="Script" uid="uid://bjnjgj1o2g774" path="res://addons/GDContextMenu/Demo/DemoSceneScript.cs" id="2_xmw4l"]
@@ -14,36 +14,79 @@ script/source = "extends Panel
 func _runTest() -> void:
 	print(\"(Control) Context Menu is working...\")
 
-func _enableThirdButton() -> void:
-	#Could also use:
-	#contextMenu.SetButtonDisabled(2, false)
-	#context_menu.contextMenu.SetButtonDisabledByLabel(\"Disabled\", false)
-	context_menu.contextMenu.SetButtonDisabledByLabel(\"Disabled\", false)
-	
+func _enableThirdButton(isChecked : bool) -> void:
+	if(isChecked):
+		context_menu.contextMenu.set_item_disabled(\"Disabled\", false)
+		context_menu.contextMenu.update_item_label(\"Disabled\", \"Enabled\")
+	else:
+		context_menu.contextMenu.set_item_disabled(\"Disabled\", true)
+		context_menu.contextMenu.update_item_label(\"Enabled\", \"Disabled\")
 "
 
 [sub_resource type="Resource" id="Resource_b6a1l"]
 script = ExtResource("4_d71r2")
+ItemType = 0
 Label = "Run the Test"
 ActionTarget = NodePath("..")
 ActionMethod = "_runTest"
 disabled = false
+isChecked = false
+contextMenuEntries = Array[ExtResource("4_d71r2")]([])
 metadata/_custom_type_script = "uid://tsgoc20b2p45"
 
 [sub_resource type="Resource" id="Resource_d71r2"]
 script = ExtResource("4_d71r2")
+ItemType = 2
 Label = "Enable third Button"
 ActionTarget = NodePath("..")
 ActionMethod = "_enableThirdButton"
 disabled = false
+isChecked = false
+contextMenuEntries = Array[ExtResource("4_d71r2")]([])
 metadata/_custom_type_script = "uid://tsgoc20b2p45"
 
 [sub_resource type="Resource" id="Resource_c3ecu"]
 script = ExtResource("4_d71r2")
+ItemType = 0
 Label = "Disabled"
-ActionTarget = NodePath("..")
+ActionTarget = null
 ActionMethod = ""
 disabled = true
+isChecked = false
+contextMenuEntries = Array[ExtResource("4_d71r2")]([])
+metadata/_custom_type_script = "uid://tsgoc20b2p45"
+
+[sub_resource type="Resource" id="Resource_bm1li"]
+script = ExtResource("4_d71r2")
+ItemType = 1
+Label = ""
+ActionTarget = null
+ActionMethod = ""
+disabled = false
+isChecked = false
+contextMenuEntries = Array[ExtResource("4_d71r2")]([])
+metadata/_custom_type_script = "uid://tsgoc20b2p45"
+
+[sub_resource type="Resource" id="Resource_flksr"]
+script = ExtResource("4_d71r2")
+ItemType = 0
+Label = "Run the Submenu Test"
+ActionTarget = NodePath("..")
+ActionMethod = "_runTest"
+disabled = false
+isChecked = false
+contextMenuEntries = Array[ExtResource("4_d71r2")]([])
+metadata/_custom_type_script = "uid://tsgoc20b2p45"
+
+[sub_resource type="Resource" id="Resource_k6jeg"]
+script = ExtResource("4_d71r2")
+ItemType = 3
+Label = "Submenu"
+ActionTarget = null
+ActionMethod = ""
+disabled = false
+isChecked = false
+contextMenuEntries = Array[ExtResource("4_d71r2")]([SubResource("Resource_flksr")])
 metadata/_custom_type_script = "uid://tsgoc20b2p45"
 
 [node name="Control" type="Control"]
@@ -104,5 +147,6 @@ offset_right = -848.0
 offset_bottom = -4.0
 script = ExtResource("3_f307w")
 _nodeToConnect = NodePath("..")
-MenuEntries = Array[ExtResource("4_d71r2")]([SubResource("Resource_b6a1l"), SubResource("Resource_d71r2"), SubResource("Resource_c3ecu")])
+_minimumSize = Vector2i(400, 0)
+MenuEntries = Array[ExtResource("4_d71r2")]([SubResource("Resource_b6a1l"), SubResource("Resource_d71r2"), SubResource("Resource_c3ecu"), SubResource("Resource_bm1li"), SubResource("Resource_k6jeg")])
 metadata/_custom_type_script = "uid://qhg58byq8uba"

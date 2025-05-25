@@ -1,0 +1,90 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\xpedi\\Documents\\plugins\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A9FD0862-E7D3-4B9D-8044-E936B24A0CC5}|Plugins.csproj|c:\\users\\xpedi\\documents\\plugins\\addons\\gdcontextmenu\\demo\\demoscenescript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A9FD0862-E7D3-4B9D-8044-E936B24A0CC5}|Plugins.csproj|solutionrelative:addons\\gdcontextmenu\\demo\\demoscenescript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9FD0862-E7D3-4B9D-8044-E936B24A0CC5}|Plugins.csproj|c:\\users\\xpedi\\documents\\plugins\\addons\\gdcontextmenu\\code\\contextmenucontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A9FD0862-E7D3-4B9D-8044-E936B24A0CC5}|Plugins.csproj|solutionrelative:addons\\gdcontextmenu\\code\\contextmenucontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9FD0862-E7D3-4B9D-8044-E936B24A0CC5}|Plugins.csproj|c:\\users\\xpedi\\documents\\plugins\\addons\\gdcontextmenu\\contextmenuplugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A9FD0862-E7D3-4B9D-8044-E936B24A0CC5}|Plugins.csproj|solutionrelative:addons\\gdcontextmenu\\contextmenuplugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9FD0862-E7D3-4B9D-8044-E936B24A0CC5}|Plugins.csproj|c:\\users\\xpedi\\documents\\plugins\\addons\\gdcontextmenu\\code\\contextmenuentry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A9FD0862-E7D3-4B9D-8044-E936B24A0CC5}|Plugins.csproj|solutionrelative:addons\\gdcontextmenu\\code\\contextmenuentry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ContextMenuEntry.cs",
+              "DocumentMoniker": "C:\\Users\\xpedi\\Documents\\plugins\\addons\\GDContextMenu\\Code\\ContextMenuEntry.cs",
+              "RelativeDocumentMoniker": "addons\\GDContextMenu\\Code\\ContextMenuEntry.cs",
+              "ToolTip": "C:\\Users\\xpedi\\Documents\\plugins\\addons\\GDContextMenu\\Code\\ContextMenuEntry.cs",
+              "RelativeToolTip": "addons\\GDContextMenu\\Code\\ContextMenuEntry.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAkAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-23T17:38:05.527Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ContextMenuPlugin.cs",
+              "DocumentMoniker": "C:\\Users\\xpedi\\Documents\\plugins\\addons\\GDContextMenu\\ContextMenuPlugin.cs",
+              "RelativeDocumentMoniker": "addons\\GDContextMenu\\ContextMenuPlugin.cs",
+              "ToolTip": "C:\\Users\\xpedi\\Documents\\plugins\\addons\\GDContextMenu\\ContextMenuPlugin.cs",
+              "RelativeToolTip": "addons\\GDContextMenu\\ContextMenuPlugin.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-23T17:23:47.521Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ContextMenuControl.cs",
+              "DocumentMoniker": "C:\\Users\\xpedi\\Documents\\plugins\\addons\\GDContextMenu\\Code\\ContextMenuControl.cs",
+              "RelativeDocumentMoniker": "addons\\GDContextMenu\\Code\\ContextMenuControl.cs",
+              "ToolTip": "C:\\Users\\xpedi\\Documents\\plugins\\addons\\GDContextMenu\\Code\\ContextMenuControl.cs",
+              "RelativeToolTip": "addons\\GDContextMenu\\Code\\ContextMenuControl.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-23T17:23:43.838Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DemoSceneScript.cs",
+              "DocumentMoniker": "C:\\Users\\xpedi\\Documents\\plugins\\addons\\GDContextMenu\\Demo\\DemoSceneScript.cs",
+              "RelativeDocumentMoniker": "addons\\GDContextMenu\\Demo\\DemoSceneScript.cs",
+              "ToolTip": "C:\\Users\\xpedi\\Documents\\plugins\\addons\\GDContextMenu\\Demo\\DemoSceneScript.cs",
+              "RelativeToolTip": "addons\\GDContextMenu\\Demo\\DemoSceneScript.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-23T17:17:39.297Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

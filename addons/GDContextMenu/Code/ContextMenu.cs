@@ -1,87 +1,216 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 
 [GlobalClass]
 public partial class ContextMenu : Control
 {
     private PopupMenu _menu;
-    private Dictionary<int, Action> _actions = new();
-    private int _nextId = 0;
+    private PositionMode _currentPositionMode = PositionMode.CURSOR;
 
-    public ContextMenu(Node parent)
-    {
-        _menu = new PopupMenu();
-        parent.AddChild(_menu, true);
-        _menu.Hide();
-        _menu.Connect("id_pressed", Callable.From((int id) => _on_item_pressed(id)));
-    }
+    private Dictionary<int, Callable?> _actions = new();
+    private Dictionary<int, Callable?> _checkboxActions = new();
+
+    private int _nextId = 0;
 
     public ContextMenu()
     {
         _menu = new PopupMenu();
-        AddChild(_menu, true);
+       
         _menu.Hide();
         _menu.Connect("id_pressed", Callable.From((int id) => _on_item_pressed(id)));
     }
 
-    public void AddButton(string label, Action callback, bool disabled = false)
+    #region "Public Functions"
+    public void attach_to(Node parent)
+    {
+        parent.AddChild(_menu, true);
+    }
+
+    public void add_item(string label, Callable callback, bool disabled = false, Texture2D icon = null)
     {
         _menu.AddItem(label, _nextId);
         _menu.SetItemDisabled(_nextId, disabled);
+
+        if (icon != null)
+        {
+            _menu.SetItemIcon(_nextId, icon);
+        }
+
         _actions[_nextId] = callback;
+
         _nextId++;
     }
 
-    public void AddButton(string label, GodotObject target, string methodName, bool disabled = false)
+    public void add_checkbox_item(string label, Callable callback, bool disabled = false, bool isChecked = false, Texture2D icon = null)
     {
-        int id = _nextId++;
-        _menu.AddItem(label, id);
-        _menu.SetItemDisabled(id, disabled);
-        _actions[id] = () =>
+        _menu.AddCheckItem(label, _nextId);
+
+        _menu.SetItemDisabled(_nextId, disabled);
+        _menu.SetItemChecked(_nextId, isChecked);
+
+        if (icon != null)
         {
-            if (target != null && target.HasMethod(methodName))
-                target.Call(methodName);
-        };
+            _menu.SetItemIcon(_nextId, icon);
+        }
+
+        _checkboxActions[_nextId] = callback;
+
+        _nextId++;
     }
 
-    public void Show(Vector2 screenPosition)
+    public void add_placeholder_item(string label, bool disabled = false, Texture2D icon = null)
     {
-        _menu.SetPosition((Vector2I)screenPosition);
-        _menu.Popup();
+        _menu.AddItem(label, _nextId);
+        _menu.SetItemDisabled(_nextId, disabled);
+
+        if (icon != null)
+        {
+            _menu.SetItemIcon(_nextId, icon);
+        }
+
+        _nextId++;
     }
 
-    private void _on_item_pressed(int id)
+    public void add_seperator()
     {
-        if (_actions.TryGetValue(id, out var callback))
-            callback?.Invoke();
+        _menu.AddSeparator();
     }
 
-    public void ConnectToNode(Control node)
+    public void connect_to(Control node)
     {
         node.GuiInput += (InputEvent @event) =>
         {
             if (@event is InputEventMouseButton mb && mb.ButtonIndex == MouseButton.Right && mb.Pressed)
             {
-                Show(node.GetGlobalMousePosition());
+                show_item(node);
             }
         };
     }
 
-    public void SetButtonDisabled(int id, bool disabled)
+    public void set_minimum_size(Vector2I size)
     {
-        _menu.SetItemDisabled(id, disabled);
+        _menu.Size = size;
     }
 
-    public void SetButtonDisabledByLabel(string label, bool disabled)
+    public void set_item_disabled(Variant id, bool disabled)
     {
-        for (int i = 0; i < _menu.GetItemCount(); i++)
+        if(id.VariantType == Variant.Type.Int)
         {
-            if (_menu.GetItemText(i) == label)
+            _menu.SetItemDisabled((int)id, disabled);
+        }
+        
+        if(id.VariantType == Variant.Type.String)
+        {
+            for (int i = 0; i < _menu.GetItemCount(); i++)
             {
-                _menu.SetItemDisabled(i, disabled);
-                break;
+                if (_menu.GetItemText(i) == id.ToString())
+                {
+                    _menu.SetItemDisabled(i, disabled);
+                    break;
+                }
             }
         }
     }
+
+    public void set_item_checked(Variant id, bool isChecked)
+    {
+        if (id.VariantType == Variant.Type.Int)
+        {
+            _menu.SetItemChecked((int)id, isChecked);
+        }
+
+        if (id.VariantType == Variant.Type.String)
+        {
+            for (int i = 0; i < _menu.GetItemCount(); i++)
+            {
+                if (_menu.GetItemText(i) == id.ToString())
+                {
+                    _menu.SetItemChecked((int)i, isChecked);
+                    break;
+                }
+            }
+        }
+    }
+    
+    public void set_position_mode(PositionMode mode)
+    {
+        _currentPositionMode = mode;
+    }
+
+    public ContextMenu add_submenu(string label)
+    {
+        var submenu = new ContextMenu();
+        submenu.Name = $"submenu_{_nextId}";
+
+        _menu.AddChild(submenu._menu);
+
+        _menu.AddSubmenuNodeItem(label, submenu._menu);
+
+        _nextId++;
+        return submenu;
+    }
+
+    public void update_item_label(Variant id, string newLabel)
+    {
+        if (id.VariantType == Variant.Type.Int)
+        {
+            _menu.SetItemText((int)id, newLabel);
+        }
+
+        if (id.VariantType == Variant.Type.String)
+        {
+            for (int i = 0; i < _menu.GetItemCount(); i++)
+            {
+                if (_menu.GetItemText(i) == id.ToString())
+                {
+                    _menu.SetItemText((int)i, newLabel);
+                    break;
+                }
+            }
+        }
+    }
+    #endregion
+
+    #region "Private Functions"
+    private void show_item(Control parent)
+    {
+        Vector2 position;
+
+        switch (_currentPositionMode)
+        {
+            case PositionMode.CURSOR:
+                position = parent.GetGlobalMousePosition();
+                break;
+            case PositionMode.NODE_CENTER:
+                position = parent.GetGlobalRect().Size / 2;
+                break;
+            case PositionMode.NODE_BOTTOM:
+                var rect = parent.GetGlobalRect();
+                position = new Vector2(rect.Position.X, rect.Position.Y + rect.Size.Y);
+                break;
+            default:
+                position = GetGlobalMousePosition();
+                break;
+        }
+
+        _menu.SetPosition((Vector2I)position);
+        _menu.Popup();
+    }
+
+    private void _on_item_pressed(int id)
+    {
+        if (_checkboxActions.TryGetValue(id, out var checkboxCallback) && checkboxCallback != null)
+        {
+            _menu.SetItemChecked(id, !_menu.IsItemChecked(id));
+            bool isChecked = _menu.IsItemChecked(id);
+            checkboxCallback?.CallDeferred(isChecked);
+        }
+        else if (_actions.TryGetValue(id, out var callback) && callback != null)
+        {
+            callback?.CallDeferred();
+        }
+    }
+    #endregion
 }
